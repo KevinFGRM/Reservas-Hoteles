@@ -1,0 +1,242 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Elegance</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="estilos.css" />
+</head>
+<body>
+
+    <header>
+        <h1>Hotel Elegance</h1>
+        <span>Sistema de Reservas</span>
+    </header>
+
+    <nav>
+        <a href="index.html" class="active">Seleccionar Habitaciones</a>
+        <a id="refReservas" href="reservas.html">Resumen y Reserva</a>
+        <a href="admin.html">Administración</a>
+    </nav>
+
+    <main>
+
+        <p class="barra-seleccion">
+            Habitaciones seleccionadas: <strong>0 / 5</strong>
+        </p>
+        <nav class="filtro">
+            <a class="todas active">Todas</a>
+            <a class="standard">Standard</a>
+            <a class="deluxe">Deluxe</a>
+            <a class="suite">Suite</a>
+            <a class="presidencial">Presidencial</a>
+            <a class="disponibles">Disponibles</a>
+            <a class="ocupadas">Ocupadas</a>
+        </nav>
+
+
+        <section class="habitaciones">
+
+            <!--<div class="habitacion habitacion-standard ocupada">
+            <div class="num">101</div>
+            <i class="fa-solid fa-bed"></i>
+            <p class="tipo">Standard</p>
+            <p class="precio">$1200</p>
+            <p class="estado">Dispkjnskaonible</p>
+        </div>-->
+            <!--<div class="habitacion habitacion-deluxe">
+            <div class="num">131</div>
+            <i class="fa-solid fa-couch"></i>
+            <p class="tipo">Deluxe</p>
+            <p class="precio">$2000</p>
+            <p class="estado">Disponible</p>
+        </div>
+
+        <div class="habitacion habitacion-suite">
+            <div class="num">136</div>
+            <i class="fa-solid fa-crown"></i>
+            <p class="tipo">Suite</p>
+            <p class="precio">$3500</p>
+            <p class="estado">Disponible</p>
+        </div>
+
+        <div class="habitacion habitacion-presidencial">
+            <div class="num">146</div>
+            <i class="fa-solid fa-gem"></i>
+            <p class="tipo">Presidencial</p>
+            <p class="precio">$6000</p>
+            <p class="estado">Disponible</p>
+        </div>-->
+        </section>
+    </main>
+    <script>
+        const contador = document.querySelector("strong");
+        const contenedor = document.querySelector(".habitaciones");
+
+        const tiposHabitaciones = [
+            { clase: "habitacion-standard", icono: "fa-bed", nombre: "Standard", precio: 1200, cantidad: 20 },
+            { clase: "habitacion-deluxe", icono: "fa-couch", nombre: "Deluxe", precio: 2000, cantidad: 15 },
+            { clase: "habitacion-suite", icono: "fa-crown", nombre: "Suite", precio: 3500, cantidad: 10 },
+            { clase: "habitacion-presidencial", icono: "fa-gem", nombre: "Presidencial", precio: 6000, cantidad: 5 }
+        ];
+
+        let numero = 101;
+        let seleccionadas = JSON.parse(localStorage.getItem("habitacionesSeleccionadas")) || [];
+        const reservadas = JSON.parse(localStorage.getItem("habitacionesReservadas")) || [];
+
+        for (const tipo of tiposHabitaciones) {
+            for (let i = 0; i < tipo.cantidad; i++) {
+                const habitacion = document.createElement("div");
+                habitacion.classList.add("habitacion", tipo.clase, "disponible");
+
+                let colorIcono = "";
+                switch (tipo.nombre) {
+                    case "Deluxe":
+                        colorIcono = "#0074b1";
+                        break;
+                    case "Suite":
+                        colorIcono = "#d19a00";
+                        break;
+                    case "Presidencial":
+                        colorIcono = "#009faf";
+                        break;
+                    default:
+                        colorIcono = "";
+                        break;
+                }
+
+                habitacion.innerHTML = `
+                    <div class="num">${numero}</div>
+                    <i class="fa-solid ${tipo.icono}" style="color: ${colorIcono};"></i>
+                    <p class="tipo">${tipo.nombre}</p>
+                    <p class="precio">$${tipo.precio}</p>
+                    <p class="estado">Disponible</p>
+                `;
+
+                if (seleccionadas.some(h => h.numero == numero))
+                    habitacion.classList.add("h-seleccionada");
+
+                if (reservadas.some(h => h.numero == numero)) {
+                    habitacion.classList.add("ocupada");
+                    habitacion.classList.remove("disponible");
+                    habitacion.querySelector(".estado").textContent = "Ocupada";
+                }
+
+                contenedor.appendChild(habitacion);
+                numero++;
+            }
+        }
+
+
+        let constante = seleccionadas.length;
+        contador.textContent = `${constante} / 5`;
+
+        contenedor.addEventListener("click", function (e) {
+
+            let habitacionSeleccionada = e.target.closest(".habitacion");
+
+            const num = parseInt(habitacionSeleccionada.querySelector(".num").textContent);
+            const tipo = habitacionSeleccionada.querySelector(".tipo").textContent;
+            const icono = habitacionSeleccionada.querySelector("i").classList[1];
+            const precio = parseInt(habitacionSeleccionada.querySelector(".precio").textContent.replace("$", ""));
+
+            if (!habitacionSeleccionada)
+                return;
+
+            if (habitacionSeleccionada.classList.contains("ocupada")) {
+                return;
+            }
+            else {
+                if (habitacionSeleccionada.classList.contains("h-seleccionada")) {
+                    habitacionSeleccionada.classList.remove("h-seleccionada");
+                    seleccionadas = seleccionadas.filter(h => h.numero != num);
+                    constante--;
+                }
+                else {
+                    if (constante <= 4) {
+                        habitacionSeleccionada.classList.add("h-seleccionada");
+                        seleccionadas.push({ numero: num, tipo, icono, precio });
+                        constante++;
+                    }
+                    else
+                        return
+                }
+                contador.textContent = `${constante} / 5`;
+
+                localStorage.setItem("habitacionesSeleccionadas", JSON.stringify(seleccionadas));
+            }
+            console.log(habitacionSeleccionada);
+            console.log(seleccionadas);
+            console.log(contador);
+        });
+
+
+        const filtro = document.querySelector(".filtro");
+        const aFiltro = document.querySelectorAll(".filtro a");
+
+        filtro.addEventListener("click", function (e) {
+            const seleccionado = e.target;
+
+            if (seleccionado.tagName != "A")
+                return;
+
+            for (const b of aFiltro) {
+                if (b.classList.contains("active")) {
+                    b.classList.remove("active");
+                    break;
+                }
+            }
+
+            seleccionado.classList.add("active");
+
+            let tipo = "";
+            for (const c of seleccionado.classList) {
+                if (c != "active") {
+                    tipo = c;
+                    break;
+                }
+            }
+
+            filtrarHabitaciones(tipo);
+        });
+
+        function filtrarHabitaciones(tipo) {
+            const habitaciones = document.querySelectorAll(".habitacion");
+
+            for (const h of habitaciones) {
+
+                if (tipo == "todas") {
+                    h.style.display = "block";
+                }
+                else {
+                    if (tipo == "disponibles") {
+                        if (h.classList.contains("ocupada")) {
+                            h.style.display = "none";
+                        } else {
+                            h.style.display = "block";
+                        }
+                    }
+                    else if (tipo == "ocupadas") {
+                        if (!h.classList.contains("ocupada")) {
+                            h.style.display = "none";
+                        } else {
+                            h.style.display = "block";
+                        }
+                    }
+                    else {
+                        if (h.classList.contains(`habitacion-${tipo}`)) {
+                            h.style.display = "block";
+                        } else {
+                            h.style.display = "none";
+                        }
+                    }
+                }
+            }
+        }
+
+
+    </script>
+</body>
+</html>
+

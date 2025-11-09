@@ -1,0 +1,176 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reservas de Habitaciones</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <link rel="stylesheet" href="estilos.css" />
+</head>
+<body>
+    <header>
+        <h1>Hotel Elegance</h1>
+        <span>Sistema de Reservas</span>
+    </header>
+
+    <nav>
+        <a href="index.html">Seleccionar Habitaciones</a>
+        <a id="refReservas" href="reservas.html" class="active">Resumen y Reserva</a>
+        <a href="admin.html">Administración</a>
+    </nav>
+    <main>
+        <section class="reservaciones">
+            <div class="header">
+                <h2>Habitaciones Seleccionadas</h2>
+                <button class="btn-limpiar">Limpiar Todo</button>
+            </div>
+
+            <section class="h-reserva">
+                <!--<div>
+                    <i class="fa-solid fa-bed"></i>
+                    <p class="nombre">Habitación 101</p>
+                    <p class="tipo">Standard</p>
+                    <p class="precio">$1200</p>
+                    <i class="fa-solid fa-trash"></i>
+                </div>-->
+            </section>
+
+            <div class="total">
+                <span>Total:</span>
+                <span class="valor"></span>
+            </div>
+
+            <form>
+                <h2>Completar Reserva</h2>
+
+                <label>Nombre del Cliente</label>
+                <input type="text" placeholder="Ingrese su nombre completo">
+
+                <label>Fecha de Entrada</label>
+                <input class="entrada" type="date">
+
+                <label>Fecha de Salida</label>
+                <input class="salida" type="date">
+
+                <button class="btn-confirmar">Confirmar Reserva</button>
+            </form>
+        </section>
+    </main>
+    <script>
+        const contenedor2 = document.querySelector(".h-reserva");
+        const totalE = document.querySelector(".valor");
+        let seleccionadas = JSON.parse(localStorage.getItem("habitacionesSeleccionadas")) || [];
+
+        function cargarSeleccionadas() {
+            contenedor2.replaceChildren();
+
+            seleccionadas = JSON.parse(localStorage.getItem("habitacionesSeleccionadas")) || [];
+
+            if (seleccionadas.length == 0) {
+                contenedor2.innerHTML = `<p class="vacio">No hay habitaciones seleccionadas.</p>`;
+                totalE.textContent = "$0";
+                return;
+            }
+
+            let total = 0;
+            for (const habitacion of seleccionadas) {
+                const div = document.createElement("div");
+
+                let colorIcono = "";
+                switch (habitacion.tipo) {
+                    case "Deluxe": colorIcono = "#0074b1"; break;
+                    case "Suite": colorIcono = "#d19a00"; break;
+                    case "Presidencial": colorIcono = "#009faf"; break;
+                }
+
+                div.innerHTML = `
+                    <i class="fa-solid ${habitacion.icono}" style="color: ${colorIcono};"></i>
+                    <p class="nombre">Habitacion ${habitacion.numero}</p>
+                    <p class="tipo">${habitacion.tipo}</p>
+                    <p class="precio">$${habitacion.precio}</p>
+                    <i class="fa-solid fa-trash eliminar" data-num="${habitacion.numero}"></i>
+                `;
+                contenedor2.appendChild(div);
+                total += habitacion.precio;
+            }
+
+            totalE.textContent = `$${total}`;
+        }
+
+        contenedor2.addEventListener("click", (e) => {
+            if (e.target.classList.contains("eliminar")) {
+                const num = e.target.dataset.num;
+                seleccionadas = seleccionadas.filter(h => h.numero != num);
+                localStorage.setItem("habitacionesSeleccionadas", JSON.stringify(seleccionadas));
+                cargarSeleccionadas();
+            }
+        });
+
+        document.querySelector(".btn-limpiar").addEventListener("click", () => {
+            localStorage.removeItem("habitacionesSeleccionadas");
+            seleccionadas = [];
+            cargarSeleccionadas();
+        });
+
+        document.querySelector(".btn-confirmar").addEventListener("click", (e) => {
+            e.preventDefault();
+
+            const nombre = document.querySelector("input[type='text']").value.trim();
+            const entrada = document.querySelector(".entrada").value;
+            const salida = document.querySelector(".salida").value;
+
+            if (!nombre || !entrada || !salida) {
+                alert("Completa todos los campos antes de confirmar la reserva.");
+                return;
+            }
+
+            if (seleccionadas.length == 0) {
+                alert("No hay habitaciones seleccionadas para reservar.");
+                return;
+            }
+
+            const total = seleccionadas.reduce((a, h) => a + h.precio, 0);
+
+            const nuevaReserva = {
+                nombre,
+                entrada,
+                salida,
+                habitaciones: seleccionadas,
+                total
+            };
+            console.log(nuevaReserva);
+            console.log(seleccionadas);
+
+            const reservas = JSON.parse(localStorage.getItem("reservas")) || [];
+            reservas.push(nuevaReserva);
+            localStorage.setItem("reservas", JSON.stringify(reservas));
+
+
+            const habitacionesReservadas = JSON.parse(localStorage.getItem("habitacionesReservadas")) || [];
+            const nuevasOcupadas = seleccionadas.map(h => ({
+                numero: h.numero,
+                tipo: h.tipo,
+                precio: h.precio,
+                icono: h.icono
+            }));
+            localStorage.setItem("habitacionesReservadas", JSON.stringify([...habitacionesReservadas, ...nuevasOcupadas]));
+
+
+            localStorage.removeItem("habitacionesSeleccionadas");
+            nombre.textContent = "";
+            entrada.textContent = "";
+            salida.textContent = "";
+
+            alert("Reserva confirmada con exito.");
+            cargarSeleccionadas();
+            console.log(reservas);
+        });
+
+        cargarSeleccionadas();
+
+
+    </script>
+
+</body>
+</html>

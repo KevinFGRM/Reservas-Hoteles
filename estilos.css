@@ -1,0 +1,528 @@
+﻿/*estilos del header general*/
+
+:root {
+    --cafe: #4b2c20;
+    --crema: #f5f1ee;
+    --dorado: #e5b900;
+    --gris-suave: #e8e3df;
+    --texto: #3a2a22;
+    --fondo-crema: #d8cfc6;
+    --contraste-crema: #d3c5bb;
+}
+
+body, html {
+    font-family: "Segoe UI", sans-serif;
+    background-color: var(--crema);
+    margin: 0;
+    color: var(--texto);
+}
+
+header {
+    background-color: var(--cafe);
+    color: white;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+    header h1 {
+        margin: 0;
+        font-size: 1.6rem;
+    }
+
+    header span {
+        color: lightgray;
+    }
+
+nav {
+    display: flex;
+    background: var(--fondo-crema);
+    padding: 5px 20px;
+    justify-content: space-around;
+}
+
+    nav a {
+        background-color: var(--contraste-crema);
+        text-decoration: none;
+        border: none;
+        padding: 10px;
+        border-radius: 12px;
+        cursor: pointer;
+        color: black;
+        width: 200px;
+        text-align: center;
+    }
+
+        nav a.active {
+            background: var(--cafe);
+            color: white;
+        }
+
+        nav a:hover {
+            background-color: var(--crema);
+            transition: 0.3s ease;
+            color: black;
+        }
+
+
+/*estilos del index*/
+
+main .barra-seleccion {
+    text-align: center;
+    background-color: var(--dorado);
+    color: black;
+    font-weight: bold;
+    padding: 6px 10px;
+    border-radius: 12px;
+    width: 90%;
+    margin: 15px auto 15px auto;
+}
+
+.habitaciones {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 15px;
+    width: 90%;
+    margin: 0 auto 40px;
+}
+
+.habitacion {
+    background-color: white;
+    border: 2px solid var(--contraste-crema);
+    border-radius: 10px;
+    padding: 10px;
+    position: relative;
+    text-align: center;
+    box-shadow: 0 2px 5px #00000020;
+}
+
+    .habitacion .num {
+        position: absolute;
+        right: 6px;
+        top: 6px;
+        background-color: var(--contraste-crema);
+        border-radius: 20%;
+        padding: 4px;
+        font-weight: bold;
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .habitacion i {
+        font-size: 2.8rem;
+    }
+
+    .habitacion .precio {
+        color: var(--dorado);
+        font-weight: bold;
+    }
+
+.habitacion-deluxe .num {
+    background-color: #0074b1;
+}
+
+.habitacion-deluxe i {
+    color: #0074b1;
+}
+
+.habitacion-suite .num {
+    background-color: #d19a00;
+}
+
+.habitacion-suite i {
+    color: #d19a00;
+}
+
+.habitacion-presidencial .num {
+    background-color: #009faf;
+}
+
+.habitacion-presidencial i {
+    color: #009faf;
+}
+
+
+div.disponible:hover {
+    transform: scale(1.01);
+    cursor: pointer;
+    transition: 0.2s ease;
+    box-shadow: 0 3px 10px #00000050;
+}
+
+.habitaciones div.ocupada {
+    opacity: 0.7;
+    border: 1px solid darkred;
+    background-color: lightgray;
+}
+
+section.habitaciones .h-seleccionada {
+    background-color: goldenrod;
+    border: 2px solid darkgoldenrod;
+}
+
+
+main nav.filtro {
+    justify-content: center;
+    background-color: var(--crema);
+    margin: 10px 5%;
+    gap:10px;
+}
+
+
+
+/*estilos de reservaciones
+*/
+.reservaciones {
+    background-color: white;
+    width: 95%;
+    margin: 20px auto 40px;
+    border-radius: 10px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #d4c3b9;
+    padding: 10px 15px;
+}
+
+.btn-limpiar {
+    background-color: darkred;
+    color: white;
+    border-radius: 5px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+    .btn-limpiar:hover, .btn-reiniciar:hover {
+        background-color: red;
+    }
+
+
+.h-reserva div {
+    display: grid;
+    grid-template-columns: .1fr 1fr auto auto;
+    grid-template-rows: 1fr 1fr;
+    background: #f3edeb;
+    border: 1px solid #c8b7ad;
+    max-height: 80px;
+    border-radius: 10px;
+    margin: 10px;
+}
+
+.reservaciones .h-reserva i {
+    grid-row: span 2;
+    font-size: 2.4rem;
+    align-self: center;
+    justify-self: center;
+    margin: 10px;
+}
+
+.h-reserva i:last-of-type, .reserva .fa-trash {
+    color: darkred;
+}
+
+    .h-reserva i:last-of-type:hover, .reserva .fa-trash:hover {
+        color: red;
+        cursor: pointer;
+    }
+
+.h-reserva p {
+    align-self: center;
+    margin: 0;
+}
+
+    .h-reserva p.tipo {
+        grid-column: 2;
+        grid-row: 2;
+    }
+
+    .h-reserva p.precio, .h-reserva .btn-eliminar {
+        margin: 10px;
+        grid-row: span 2;
+    }
+
+.total {
+    display: flex;
+    background-color: white;
+    justify-content: space-between;
+    padding: 5px 10px;
+    text-align: right;
+    font-weight: bold;
+    font-size: 1.4em;
+    border-top: 2px solid #d4c3b9;
+}
+
+form {
+    background-color: white;
+    padding: 15px 20px;
+    border-radius: 10px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    max-height: 250px;
+}
+
+    form h3 {
+        margin: 0;
+        grid-column: span 2;
+    }
+
+label {
+    font-weight: bold;
+    align-content: end;
+    margin: 5px;
+}
+
+    label:first-of-type {
+        grid-column: span 2;
+    }
+
+form input[type="text"] {
+    grid-column: span 2;
+    width: 98.5%;
+}
+
+input[type="text"],
+input[type="date"] {
+    width: 97%;
+    padding: 8px;
+    border: 1px solid #c8b7ad;
+    border-radius: 8px;
+}
+
+    input[type="date"].entrada {
+        grid-row: 5;
+        grid-column: 1;
+    }
+
+
+
+.btn-confirmar {
+    grid-column: span 2;
+    width: 100%;
+    margin-top: 15px;
+    background: linear-gradient(to right, #f6d20b, #d8a309);
+    color: white;
+    font-weight: bold;
+    padding: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+    .btn-confirmar:hover {
+        filter: brightness(1.1);
+    }
+
+.vacio {
+    text-align: center;
+    font-size: 1.2rem;
+    color: gray;
+    padding: 20px;
+}
+
+
+
+
+
+/*
+    estilos admin*/
+
+.estadisticas {
+    display: flex;
+    justify-content: space-around;
+    margin: 10px;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    border-radius: 10px;
+    padding: 10px;
+    color: white;
+    min-width: 250px;
+    width: 340px;
+    box-shadow: 0 2px 5px #00000020;
+}
+
+    .card i {
+        font-size: 25px;
+    }
+
+    .card h2 {
+        margin: 0;
+        font-size: 0.9rem;
+    }
+
+    .card p {
+        margin: 0;
+        font-size: 1.2rem;
+        font-weight: bold;
+    }
+
+.azul {
+    background-color: dodgerblue;
+}
+
+.rojo {
+    background-color: #d0383a;
+}
+
+.verde {
+    background-color: seagreen;
+}
+
+.dorado {
+    background-color: goldenrod;
+}
+
+
+
+.disponibilidad {
+    background-color: white;
+    margin: 10px;
+    border-radius: 10px;
+    padding: 10px 20px;
+}
+
+.categoria {
+    display: grid;
+    grid-template-columns: auto auto 1fr auto;
+    align-items: center;
+    gap: 10px;
+    margin: 8px;
+    font-weight:bold;
+}
+
+    .categoria i {
+        font-size: 1.4rem;
+    }
+    .categoria .detalle {
+        color: var(--cafe);
+    }
+    .categoria .deluxe div, main .reserva span.standard {
+        background-color: var(--cafe);
+    }
+        .categoria i.fa-couch, .deluxe .detalle {
+            color: #0074b1;
+        }
+
+    .categoria .deluxe div, main .reserva span.deluxe {
+        background-color: #0074b1;
+    }
+
+    .categoria i.fa-crown, .suite .detalle {
+        color: #d19a00;
+    }
+
+    .categoria .suite div, main .reserva span.suite {
+        background-color: #d19a00;
+    }
+
+    .categoria i.fa-gem, .presidencial .detalle {
+        color: #009faf;
+    }
+
+    .categoria .presidencial div, main .reserva span.presidencial {
+        background-color: #009faf;
+    }
+
+.barra {
+    background-color: var(--fondo-crema);
+    height: 8px;
+    border-radius: 10px;
+    grid-column: span 4;
+}
+
+    .barra div {
+        background-color: var(--cafe);
+        border-radius: 10px;
+        height: 100%;
+        width: 0;
+    }
+
+.detalle {
+    grid-row: 1;
+    grid-column: 4;
+}
+
+.historial {
+    background-color: white;
+    margin: 10px;
+    border-radius: 10px;
+    padding: 10px 15px;
+}
+
+    .historial div.header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+.btn-reiniciar {
+    background-color: #d0383a;
+    color: white;
+    border-radius: 10px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+
+.reserva {
+    margin: 10px;
+    position: relative;
+    background-color: var(--crema);
+    border: 2px solid var(--fondo-crema);
+    border-radius: 10px;
+    padding: 10px;
+}
+
+    .reserva p {
+        margin: 0;
+    }
+
+    .reserva .nombre {
+        font-weight: bold;
+    }
+
+    .reserva .fecha {
+        font-size: 0.9em;
+    }
+
+    .reserva .habitaciones {
+        display: flex;
+        gap: 5px;
+        margin: 5px;
+    }
+
+        .reserva .habitaciones span {
+            background-color: var(--contraste-crema);
+            color: white;
+            padding: 5px;
+            border-radius: 10px;
+        }
+
+
+    .reserva .total-ref {
+        margin: 10px;
+        color: goldenrod;
+        font-weight: bold;
+        text-align: right;
+    }
+
+    .reserva .fa-trash {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: 1.8rem;
+        cursor: pointer;
+    }
